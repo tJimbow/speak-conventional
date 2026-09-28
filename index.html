@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speak Conventional — Commits, Changelog &amp; Comments</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ============================================================ -->
+        <!-- INTRO                                                        -->
+        <!-- ============================================================ -->
+        <section>
+          <h1>Speak <span class="accent-comments">Conventional</span></h1>
+          <h3>Écrire pour les humains… et pour les outils</h3>
+          <p>
+            <span class="pill accent-commits">Conventional Commits</span>
+            <span class="pill accent-changelog">Conventional Changelog</span>
+            <span class="pill accent-comments">Conventional Comments</span>
+          </p>
+          <p class="tiny muted">Appuyez sur <code>S</code> pour les notes, <code>Échap</code> pour la vue d'ensemble</p>
+          <aside class="notes">
+            Accueil. L'idée du talk : trois conventions légères qui partagent un même objectif —
+            rendre explicite ce qui est implicite, pour que les humains ET les outils puissent lire nos messages.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Au programme</h2>
+          <ol>
+            <li class="fragment">Le problème : on écrit beaucoup, on se comprend peu</li>
+            <li class="fragment"><span class="accent-commits">Conventional Commits</span> — donner du sens à l'historique</li>
+            <li class="fragment"><span class="accent-changelog">Conventional Changelog</span> — faciliter l'écriture du changelog</li>
+            <li class="fragment"><span class="accent-comments">Conventional Comments</span> — rendre l'<strong>intention</strong> visible en revue</li>
+          </ol>
+        </section>
+
+        <!-- Le problème -->
+        <section>
+          <section>
+            <h2>Le problème</h2>
+            <p class="muted">Un <code>git log</code> que tout le monde a déjà vu…</p>
+            <pre><code class="language-plaintext" data-trim>
+a1b2c3d fix
+e4f5g6h wip
+i7j8k9l update
+m0n1o2p ça marche enfin
+q3r4s5t modifs suite review
+u6v7w8x Merge branch 'dev' into dev
+y9z0a1b correction bug
+            </code></pre>
+            <p class="fragment">Qu'est-ce qui a changé ? Est-ce que ça casse quelque chose ? Quelle version publier ?</p>
+            <aside class="notes">
+              Demander à la salle : qui peut me dire ce qui a été livré dans cette version ?
+              Personne. Et aucun outil non plus.
+            </aside>
+          </section>
+
+          <section>
+            <h2>… et en code review</h2>
+            <div class="cc bad">« Pourquoi tu n'utilises pas un <code>Map</code> ici ? »</div>
+            <div class="cc bad">« Ce nom de variable n'est pas terrible. »</div>
+            <div class="cc bad">« À revoir. »</div>
+            <ul class="small">
+              <li class="fragment">C'est une <strong>question</strong> ou un <strong>ordre</strong> ?</li>
+              <li class="fragment">Est-ce que ça <strong>bloque</strong> le merge ?</li>
+              <li class="fragment">Est-ce que la personne est <strong>agacée</strong> ?</li>
+            </ul>
+            <aside class="notes">
+              Même problème, autre support : le message ne porte pas son intention.
+              Le lecteur doit la deviner, et il devine souvent le pire.
+            </aside>
+          </section>
+
+          <section>
+            <h2>Le point commun</h2>
+            <p class="big-quote">Un message sans structure oblige le lecteur à <span class="accent-danger">deviner</span>.</p>
+            <div class="grid-3 fragment">
+              <div class="card commits"><h4>Commits</h4><p>Deviner <strong>la nature</strong> d'un changement</p></div>
+              <div class="card changelog"><h4>Changelog</h4><p>Deviner <strong>l'impact</strong> d'une version</p></div>
+              <div class="card comments"><h4>Comments</h4><p>Deviner <strong>l'intention</strong> du relecteur</p></div>
+            </div>
+            <p class="fragment small">Une convention = un <strong>contrat de lecture</strong> partagé.</p>
+          </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CONVENTIONAL COMMITS                                         -->
+        <!-- ============================================================ -->
+        <section>
+          <section class="section-title" data-background-color="#221a0e">
+            <p class="kicker">Partie 1</p>
+            <h1 class="accent-commits">Conventional Commits</h1>
+            <h3>Donner du sens à l'historique</h3>
+            <p class="small"><a href="https://www.conventionalcommits.org/fr/v1.0.0/" target="_blank">conventionalcommits.org</a></p>
+          </section>
+
+          <section>
+            <h2>C'est quoi ?</h2>
+            <ul>
+              <li>Une <strong>spécification légère</strong> (v1.0.0) pour les messages de commit</li>
+              <li class="fragment">Héritée de la convention du projet <strong>Angular</strong></li>
+              <li class="fragment">Lisible par un humain <strong>et</strong> analysable par une machine</li>
+              <li class="fragment">Pensée pour s'aligner avec <strong>SemVer</strong></li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Anatomie d'un commit</h2>
+            <pre><code class="nohighlight" data-trim data-noescape>
+<span class="accent-commits">&lt;type&gt;</span>[(<span class="accent-comments">scope</span>)][<span class="accent-danger">!</span>]: &lt;description&gt;
+
+[corps optionnel]
+
+[footer(s) optionnel(s)]
+            </code></pre>
+            <div class="grid-2 fragment">
+              <div class="card commits"><h4>type</h4><p>La <strong>nature</strong> du changement : <code>feat</code>, <code>fix</code>…</p></div>
+              <div class="card comments"><h4>scope</h4><p>La <strong>zone</strong> impactée : <code>auth</code>, <code>api</code>…</p></div>
+              <div class="card"><h4>description</h4><p>Résumé court, à l'impératif, sans point final</p></div>
+              <div class="card bad"><h4>! / BREAKING CHANGE</h4><p>Signale une <strong>rupture de compatibilité</strong></p></div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Les types courants</h2>
+            <table>
+              <thead><tr><th>Type</th><th>Usage</th><th>Impact SemVer</th></tr></thead>
+              <tbody>
+                <tr><td><code>feat</code></td><td>Nouvelle fonctionnalité</td><td class="accent-changelog">MINOR</td></tr>
+                <tr><td><code>fix</code></td><td>Correction de bug</td><td class="accent-changelog">PATCH</td></tr>
+                <tr><td><code>docs</code></td><td>Documentation uniquement</td><td class="muted">—</td></tr>
+                <tr><td><code>style</code></td><td>Formatage, sans effet sur le code</td><td class="muted">—</td></tr>
+                <tr><td><code>refactor</code></td><td>Ni feature ni fix</td><td class="muted">—</td></tr>
+                <tr><td><code>perf</code></td><td>Amélioration de performance</td><td class="muted">— (souvent PATCH)</td></tr>
+                <tr><td><code>test</code></td><td>Ajout / correction de tests</td><td class="muted">—</td></tr>
+                <tr><td><code>build</code> / <code>ci</code></td><td>Build, dépendances, pipelines</td><td class="muted">—</td></tr>
+                <tr><td><code>chore</code> / <code>revert</code></td><td>Maintenance / annulation</td><td class="muted">—</td></tr>
+              </tbody>
+            </table>
+            <p class="tiny muted">Seuls <code>feat</code> et <code>fix</code> sont imposés par la spec — les autres sont des conventions courantes héritées d'Angular.</p>
+          </section>
+
+          <section>
+            <h2>Breaking changes</h2>
+            <div class="cols">
+              <div>
+                <p class="small">Avec <code>!</code></p>
+                <pre><code class="language-plaintext" data-trim>
+feat(api)!: supprimer l'endpoint /v1/users
+                </code></pre>
+              </div>
+              <div>
+                <p class="small">Avec un footer</p>
+                <pre><code class="language-plaintext" data-trim>
+feat(api): passer la pagination en curseur
+
+BREAKING CHANGE: les paramètres `page` et
+`size` sont remplacés par `cursor` et `limit`.
+                </code></pre>
+              </div>
+            </div>
+            <p class="fragment">Quel que soit le type → <strong class="accent-danger">MAJOR</strong></p>
+            <aside class="notes">
+              Le footer BREAKING CHANGE est l'endroit idéal pour documenter la migration :
+              il finira tel quel dans le changelog.
+            </aside>
+          </section>
+
+          <section>
+            <h2>Avant / après</h2>
+            <div class="cols">
+              <div class="card bad">
+                <h4>Avant</h4>
+                <pre><code class="language-plaintext" data-trim>
+fix
+update
+modifs suite review
+correction bug login
+ajout export
+                </code></pre>
+              </div>
+              <div class="card good">
+                <h4>Après</h4>
+                <pre><code class="language-plaintext" data-trim>
+fix(auth): gérer l'expiration du refresh token
+feat(export): exporter les factures en CSV
+refactor(invoice): extraire le calcul de TVA
+docs(readme): documenter les variables d'env
+test(auth): couvrir le cas du token révoqué
+                </code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Un exemple complet</h2>
+            <pre><code class="language-plaintext" data-trim>
+fix(payment): éviter le double débit lors d'un retry réseau
+
+Le client relançait la requête de paiement après un timeout
+alors que le PSP avait déjà accepté la transaction.
+On envoie désormais une clé d'idempotence avec chaque requête.
+
+Refs: #482
+Reviewed-by: Alice
+            </code></pre>
+            <ul class="small">
+              <li class="fragment">La <strong>ligne 1</strong> dit <em>quoi</em></li>
+              <li class="fragment">Le <strong>corps</strong> dit <em>pourquoi</em> (le code dit déjà <em>comment</em>)</li>
+              <li class="fragment">Les <strong>footers</strong> relient au reste du monde (tickets, relecteurs, ruptures)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Pourquoi c'est utile ?</h2>
+            <div class="grid-2">
+              <div class="card commits fragment">
+                <h4>📖 Un historique lisible</h4>
+                <p>On comprend un projet en lisant son <code>git log</code>. Onboarding facilité, archéologie du code simplifiée.</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>🔍 Un historique filtrable</h4>
+                <p><code>git log --grep "^feat"</code>, retrouver tous les fixes d'un scope, préparer une démo…</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>🔢 Un versioning évident</h4>
+                <p>Le prochain numéro de version se <strong>lit</strong> dans les types : plus de débat sur « c'est une mineure ou une majeure ? »</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>📰 Un changelog facilité</h4>
+                <p>Chaque commit est déjà trié et décrit : rédiger les notes de version devient une simple relecture.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Pourquoi c'est utile ? <span class="muted small">(suite)</span></h2>
+            <div class="grid-2">
+              <div class="card commits fragment">
+                <h4>🧠 Ça force à réfléchir</h4>
+                <p>Choisir un type oblige à se demander : « qu'est-ce que je fais vraiment ? ». Si ça ne rentre pas dans un seul type… c'est peut-être <strong>deux commits</strong>.</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>🧩 Des commits atomiques</h4>
+                <p>Revues plus simples, <code>git revert</code> et <code>git bisect</code> plus fiables.</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>⚠️ Les ruptures sont visibles</h4>
+                <p>Un <code>!</code> se voit en revue, dans l'historique et dans le changelog. Fini les breaking changes cachés dans un « fix ».</p>
+              </div>
+              <div class="card commits fragment">
+                <h4>🤝 Un langage commun</h4>
+                <p>Devs, QA, PO, ops : tout le monde lit la même chose de la même façon.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Pièges à éviter</h2>
+            <ul>
+              <li class="fragment">❌ <code>chore: stuff</code> — le type ne remplace pas une bonne description</li>
+              <li class="fragment">❌ Tout mettre en <code>chore</code> pour « ne pas se tromper »</li>
+              <li class="fragment">❌ Un commit <code>feat</code> qui contient aussi 3 fixes et un refacto</li>
+              <li class="fragment">❌ Une liste de scopes infinie et incohérente → <strong>              définissez-la</strong> en équipe</li>
+                          </ul>
+          </section>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CONVENTIONAL CHANGELOG                                       -->
+        <!-- ============================================================ -->
+        <section>
+          <section class="section-title" data-background-color="#0f2219">
+            <p class="kicker">Partie 2</p>
+            <h1 class="accent-changelog">Conventional Changelog</h1>
+            <h3>Du commit au changelog</h3>
+          </section>
+
+          <section>
+            <h2>Pourquoi un changelog dans l'application ?</h2>
+            <div class="grid-3">
+              <div class="card changelog fragment">
+                <h4>📣 Informer là où ça compte</h4>
+                <p>Les utilisateurs découvrent les nouveautés <strong>dans l'outil qu'ils utilisent</strong>, pas dans un mail qu'ils ne liront pas.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🧭 Favoriser l'adoption</h4>
+                <p>Une fonctionnalité non annoncée est une fonctionnalité <strong>inutilisée</strong>.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>⚠️ Prévenir les changements</h4>
+                <p>Un comportement qui change sans explication, c'est une <strong>surprise</strong> — et un ticket de support.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🙋 Réduire le support</h4>
+                <p>« Est-ce que le bug X est corrigé ? » : la réponse est <strong>déjà dans l'application</strong>.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🤝 Créer la confiance</h4>
+                <p>Montrer que le produit <strong>vit</strong>, s'améliore et que les retours sont écoutés.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🏆 Valoriser l'équipe</h4>
+                <p>Le travail livré devient <strong>visible</strong> — pour les utilisateurs comme en interne.</p>
+              </div>
+            </div>
+            <aside class="notes">
+              Le changelog n'est pas un fichier technique pour les devs : c'est un canal de communication produit.
+              Affiché dans l'application (page « Nouveautés », pop-up après mise à jour…), il touche les utilisateurs au bon moment.
+            </aside>
+          </section>
+
+          <section>
+            <h2>Le lien : un commit ≈ une ligne de changelog</h2>
+            <table>
+              <thead><tr><th>Dans le commit</th><th>Dans le changelog</th></tr></thead>
+              <tbody>
+                <tr><td><code>feat</code></td><td>section <strong>Ajouts</strong></td></tr>
+                <tr><td><code>fix</code></td><td>section <strong>Corrections</strong></td></tr>
+                <tr><td><code>perf</code></td><td>section <strong>Améliorations</strong></td></tr>
+                <tr><td><code>!</code> / <code>BREAKING CHANGE:</code></td><td>section <strong class="accent-danger">⚠ Ruptures</strong>, en tête, avec la migration</td></tr>
+                <tr><td><code>docs</code>, <code>test</code>, <code>ci</code>, <code>chore</code>, <code>style</code>, <code>refactor</code></td><td class="muted">en général <strong>rien</strong> : invisible pour l'utilisateur</td></tr>
+                <tr><td><code>(scope)</code></td><td>le <strong>domaine</strong> concerné</td></tr>
+                <tr><td>description</td><td>le <strong>texte</strong> de l'entrée (à reformuler si besoin)</td></tr>
+                <tr><td>footer <code>Refs: #482</code></td><td>le <strong>lien</strong> vers le ticket</td></tr>
+              </tbody>
+            </table>
+            <p class="small fragment">Le tri est <strong>déjà fait</strong> au moment du commit.</p>
+          </section>
+
+          <section>
+            <h2>De l'historique…</h2>
+            <pre><code class="language-bash" data-trim>
+git log v1.5.0..HEAD --oneline
+            </code></pre>
+            <pre><code class="language-plaintext" data-trim>
+3f2a1c9 feat(api)!: passer la pagination en curseur
+91be0d4 feat(export): exporter les factures en CSV
+c7d8e2f fix(payment): éviter le double débit lors d'un retry réseau
+a41e7b0 refactor(invoice): extraire le calcul de TVA
+d0c33aa test(auth): couvrir le cas du token révoqué
+5e9f120 chore(deps): mettre à jour les dépendances
+            </code></pre>
+            <p class="small fragment">En un coup d'œil : <strong>1 rupture</strong>, <strong>2 ajouts</strong>, <strong>1 correction</strong>, et 3 commits sans intérêt pour l'utilisateur.</p>
+          </section>
+
+          <section>
+            <h2>… filtré pour l'utilisateur…</h2>
+            <pre><code class="language-bash" data-trim>
+git log v1.5.0..HEAD --oneline --grep "^feat" --grep "^fix" --grep "!:" --grep "BREAKING CHANGE"
+            </code></pre>
+            <ul class="small">
+              <li class="fragment"><code>v1.5.0..HEAD</code> : uniquement ce qui a été fait <strong>depuis la dernière version</strong></li>
+              <li class="fragment">Chaque <code>--grep</code> ajoute un critère (il suffit qu'un seul corresponde) : les <strong>ajouts</strong>, les <strong>corrections</strong> et les <strong>ruptures</strong> (<code>!</code> dans le titre ou <code>BREAKING CHANGE</code> dans le footer)</li>
+              <li class="fragment"><code>refactor</code>, <code>test</code>, <code>chore</code>… disparaissent : ils n'intéressent pas l'utilisateur</li>
+            </ul>
+            <pre class="fragment"><code class="language-plaintext" data-trim>
+3f2a1c9 feat(api)!: passer la pagination en curseur
+91be0d4 feat(export): exporter les factures en CSV
+c7d8e2f fix(payment): éviter le double débit lors d'un retry réseau
+            </code></pre>
+            <p class="small fragment">👉 C'est le <strong>brouillon du changelog</strong> : une ligne = une entrée. Il reste à les ranger par section et à les <strong>reformuler</strong> pour les utilisateurs.</p>
+            <p class="small fragment">⚡ Une recherche <code>git</code> en local prend <strong>une seconde</strong> — bien plus rapide que de parcourir les commits, PR et work items dans <strong>Azure DevOps</strong>.</p>
+          </section>
+
+          <section>
+            <h2>… au changelog</h2>
+            <pre><code class="language-markdown" data-trim>
+## [2.0.0] - 2026-09-28
+
+### ⚠ Ruptures
+
+- **api** : la pagination passe en curseur. Les paramètres `page` et `size`
+  sont remplacés par `cursor` et `limit` (#475).
+
+### Ajouts
+
+- **export** : les factures peuvent être exportées en CSV (#471).
+
+### Corrections
+
+- **paiement** : un retry réseau ne provoque plus de double débit (#482).
+            </code></pre>
+            <p class="small fragment">Toujours <strong>écrit par un humain</strong>, pour des humains — mais en quelques minutes, sans enquête.</p>
+            <aside class="notes">
+              Remarquer que le rédacteur reformule : on passe de l'impératif technique
+              à une phrase orientée utilisateur. Les commits donnent le tri, le contenu et les liens ;
+              l'humain apporte le ton et le contexte.
+            </aside>
+          </section>
+
+          <section>
+            <h2>Et le numéro de version ?</h2>
+            <p>Les types de commits disent aussi <strong>quelle version</strong> annoncer.</p>
+            <table>
+              <thead><tr><th>Commits depuis <code>v1.4.2</code></th><th>Prochaine version</th></tr></thead>
+              <tbody>
+                <tr class="fragment"><td><code>fix</code> uniquement</td><td><code>v1.4.3</code> — PATCH</td></tr>
+                <tr class="fragment"><td>au moins un <code>feat</code></td><td><code>v1.5.0</code> — MINOR</td></tr>
+                <tr class="fragment"><td>au moins un <code>!</code> / <code>BREAKING CHANGE</code></td><td><code>v2.0.0</code> — MAJOR</td></tr>
+              </tbody>
+            </table>
+            <p class="small fragment">Plus de débat : il suffit de lire les types.</p>
+          </section>
+
+          <section>
+            <h2>Pourquoi c'est utile ?</h2>
+            <div class="grid-2">
+              <div class="card changelog fragment">
+                <h4>⏱️ Rédaction plus rapide</h4>
+                <p>Le tri par type est déjà fait. On relit une liste structurée au lieu de mener une enquête.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🎯 Rien d'oublié</h4>
+                <p>Chaque <code>feat</code> et chaque <code>fix</code> saute aux yeux : on sait ce qui doit apparaître.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>⚠️ Ruptures impossibles à rater</h4>
+                <p>Le <code>!</code> et le footer <code>BREAKING CHANGE</code> signalent la rupture <strong>et</strong> fournissent la note de migration.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🔢 Version évidente</h4>
+                <p>PATCH, MINOR ou MAJOR se lit directement dans les types.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>🧾 Traçabilité</h4>
+                <p>Scope et footer <code>Refs</code> relient chaque entrée à un domaine et à un ticket.</p>
+              </div>
+              <div class="card changelog fragment">
+                <h4>✍️ L'humain garde la main</h4>
+                <p>On reformule, on regroupe, on contextualise pour les utilisateurs — sans perdre de temps à chercher.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Bonnes pratiques</h2>
+            <ul>
+              <li class="fragment">Écrire la description du commit comme une <strong>future ligne de changelog</strong></li>
+              <li class="fragment">Documenter la <strong>migration</strong> dans le footer <code>BREAKING CHANGE</code> : elle sera recopiée telle quelle</li>
+              <li class="fragment">Référencer le ticket (<code>Refs: #123</code>) pour garder le lien</li>
+              <li class="fragment">Laisser <code>chore</code>, <code>ci</code>, <code>test</code> hors du changelog : il s'adresse aux <strong>utilisateurs</strong></li>
+              <li class="fragment">Reformuler du point de vue utilisateur : « un retry ne provoque plus de double débit »</li>
+            </ul>
+          </section>
+        </section>
+        <!-- ============================================================ -->
+        <!-- CONVENTIONAL COMMENTS                                        -->
+        <!-- ============================================================ -->
+        <section>
+          <section class="section-title" data-background-color="#101a2e">
+            <p class="kicker">Partie 3</p>
+            <h1 class="accent-comments">Conventional Comments</h1>
+            <h3>Rendre l'intention visible</h3>
+            <p class="small"><a href="https://conventionalcomments.org/" target="_blank">conventionalcomments.org</a></p>
+          </section>
+
+          <section>
+            <h2>C'est quoi ?</h2>
+            <ul>
+              <li>Un format pour les <strong>commentaires de revue</strong> (PR, MR, docs, RFC…)</li>
+              <li class="fragment">Chaque commentaire commence par un <strong>label</strong> qui annonce son <strong>intention</strong></li>
+              <li class="fragment">Optionnellement, des <strong>décorations</strong> qui précisent son <strong>poids</strong></li>
+            </ul>
+            <pre class="fragment"><code class="nohighlight" data-trim data-noescape>
+<span class="accent-comments">&lt;label&gt;</span> [<span class="muted">decorations</span>]: &lt;sujet&gt;
+
+[discussion]
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Les labels</h2>
+            <table>
+              <thead><tr><th>Label</th><th>Intention</th></tr></thead>
+              <tbody>
+                <tr><td><code>praise</code></td><td>Souligner sincèrement quelque chose de bien</td></tr>
+                <tr><td><code>nitpick</code></td><td>Détail de préférence, jamais bloquant par nature</td></tr>
+                <tr><td><code>suggestion</code></td><td>Proposer une amélioration concrète</td></tr>
+                <tr><td><code>issue</code></td><td>Signaler un problème réel (idéalement avec une suggestion)</td></tr>
+                <tr><td><code>todo</code></td><td>Petite action nécessaire mais triviale</td></tr>
+                <tr><td><code>question</code></td><td>Je ne sais pas, j'ai besoin de comprendre</td></tr>
+                <tr><td><code>thought</code></td><td>Une idée qui émerge, pas une demande</td></tr>
+                <tr><td><code>chore</code></td><td>Tâche de process à faire avant d'accepter</td></tr>
+                <tr><td><code>note</code></td><td>Information à connaître, rien à faire</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section>
+            <h2>Les décorations</h2>
+            <div class="grid-3">
+              <div class="card bad">
+                <h4><code>(blocking)</code></h4>
+                <p>Doit être résolu avant le merge.</p>
+              </div>
+              <div class="card commits">
+                <h4><code>(non-blocking)</code></h4>
+                <p>N'empêche pas le merge. À traiter si on veut, maintenant ou plus tard.</p>
+              </div>
+              <div class="card comments">
+                <h4><code>(if-minor)</code></h4>
+                <p>À faire seulement si le changement est trivial.</p>
+              </div>
+            </div>
+            <p class="small fragment">Vous pouvez définir les vôtres : <code>(security)</code>, <code>(ux)</code>, <code>(test)</code>… à condition que l'équipe s'accorde dessus.</p>
+          </section>
+
+          <!-- FOCUS INTENTION -->
+          <section class="section-title" data-background-color="#0b1222">
+            <p class="kicker">🔎 Focus</p>
+            <h1 class="accent-comments">L'intention</h1>
+            <p class="big-quote fragment">Le texte ne transmet pas le ton.<br />Le lecteur le <span class="accent-danger">reconstruit</span>.</p>
+            <aside class="notes">
+              C'est LE cœur du talk. À l'oral, 90 % de l'intention passe par le ton, le visage, le contexte.
+              À l'écrit, on perd tout ça. Le lecteur comble le vide, et les études sur la communication écrite
+              montrent qu'on a tendance à surestimer notre capacité à faire passer un ton, et que le lecteur
+              interprète plus négativement qu'on ne le voulait.
+            </aside>
+          </section>
+
+          <section>
+            <h2>Un même message, trois lectures</h2>
+            <div class="cc bad">« Pourquoi tu n'utilises pas un <code>Map</code> ici ? »</div>
+            <div class="grid-3 fragment">
+              <div class="card comments"><h4>🤔 Curiosité</h4><p>« Je ne connais pas la raison, explique-moi. »</p></div>
+              <div class="card commits"><h4>💡 Suggestion</h4><p>« Un <code>Map</code> serait sans doute mieux, qu'en penses-tu ? »</p></div>
+              <div class="card bad"><h4>😤 Reproche</h4><p>« C'est évident, tu aurais dû utiliser un <code>Map</code>. »</p></div>
+            </div>
+            <p class="small fragment">L'auteur du commentaire pensait à <strong>une</strong> de ces lectures.<br />L'auteur du code, fatigué un vendredi à 18h, en lira <strong>une autre</strong>.</p>
+          </section>
+
+          <section>
+            <h2>Le label rend l'intention explicite</h2>
+            <div class="cc">
+              <span class="label accent-comments">question:</span> pourquoi un tableau plutôt qu'un <code>Map</code> ici ?
+              <br /><span class="muted">Je me demande s'il y a une contrainte d'ordre que je n'ai pas vue.</span>
+            </div>
+            <div class="cc nb fragment">
+              <span class="label accent-commits">suggestion</span> <span class="deco">(non-blocking)</span>: on pourrait utiliser un <code>Map</code> ici.
+              <br /><span class="muted">Les lookups par id seraient en O(1) — mais ça reste marginal vu la taille de la liste.</span>
+            </div>
+            <div class="cc blocking fragment">
+              <span class="label accent-danger">issue</span> <span class="deco">(blocking)</span>: la recherche linéaire dans ce tableau est appelée pour chaque ligne.
+              <br /><span class="muted">Sur 50k lignes, on passe en O(n²) — un <code>Map</code> indexé par id réglerait le problème.</span>
+            </div>
+            <p class="small fragment">Même sujet. Trois intentions. <strong>Zéro ambiguïté.</strong></p>
+          </section>
+
+          <section>
+            <h2>Ce que l'intention explicite change</h2>
+            <div class="grid-2">
+              <div class="card comments fragment">
+                <h4>Pour l'auteur du code</h4>
+                <p>Sait immédiatement <strong>quoi faire</strong> : répondre, corriger, Créer un PBI ou juste lire. Moins d'aller-retours.</p>
+              </div>
+              <div class="card comments fragment">
+                <h4>Pour le relecteur</h4>
+                <p>S'oblige à <strong>qualifier</strong> son retour : « est-ce vraiment bloquant ? » Souvent… non.</p>
+              </div>
+              <div class="card comments fragment">
+                <h4>Pour la relation</h4>
+                <p>Un <code>nitpick</code> annoncé ne ressemble plus à une attaque. On sépare <strong>la personne</strong> du <strong>code</strong>.</p>
+              </div>
+              <div class="card comments fragment">
+                <h4>Pour l'équipe</h4>
+                <p>Les juniors osent poser des <code>question:</code> sans passer pour des critiques ; les seniors ne passent plus pour des gardiens du temple.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Bloquant ou pas ? La question clé</h2>
+            <div class="cols">
+              <div class="card bad">
+                <h4>Sans convention</h4>
+                <p>Tous les commentaires ont <strong>le même poids apparent</strong>.</p>
+                <p>15 commentaires = « ma PR est mauvaise ».</p>
+                <p>L'auteur traite tout, ou arbitre au hasard.</p>
+              </div>
+              <div class="card good">
+                <h4>Avec convention</h4>
+                <p>1 <code>issue (blocking)</code>, 2 <code>suggestion</code>, 10 <code>nitpick</code>, 2 <code>praise</code>.</p>
+                <p>= « <strong>une</strong> chose à corriger, le reste est du bonus ».</p>
+                <p>Priorisation immédiate, merge plus rapide.</p>
+              </div>
+            </div>
+            <aside class="notes">
+              Un volume de commentaires élevé est très souvent perçu comme une mauvaise note.
+              Le label et la décoration permettent de trier la charge réelle.
+            </aside>
+          </section>
+
+          <section>
+            <h2><code>praise</code> : l'intention oubliée</h2>
+            <div class="cc praise">
+              <span class="label accent-changelog">praise:</span> super idée d'avoir isolé la logique de retry dans un décorateur,
+              ça rend les tests beaucoup plus lisibles.
+            </div>
+            <ul class="small">
+              <li class="fragment">La revue n'est pas qu'une chasse aux défauts : c'est aussi <strong>transmettre ce qui marche</strong></li>
+              <li class="fragment">Renforce les bonnes pratiques mieux qu'une règle écrite</li>
+              <li class="fragment">Doit être <strong>sincère et précis</strong> — pas un « LGTM 👍 » de politesse</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Avant / après</h2>
+            <div class="cols">
+              <div>
+                <div class="cc bad">« Ce nom de variable n'est pas terrible. »</div>
+                <div class="cc bad">« Il manque des tests. »</div>
+                <div class="cc bad">« Tu es sûr de ça ? »</div>
+              </div>
+              <div>
+                <div class="cc nb"><span class="label accent-commits">nitpick</span> <span class="deco">(non-blocking)</span>: <code>data</code> → <code>pendingInvoices</code> ? Ça aiderait à la lecture de la boucle.</div>
+                <div class="cc blocking"><span class="label accent-danger">todo</span> <span class="deco">(blocking)</span>: ajouter un test pour le cas où la liste est vide.</div>
+                <div class="cc"><span class="label accent-comments">question:</span> que se passe-t-il si le webhook arrive avant la réponse HTTP ? Je n'ai pas trouvé le cas géré.</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Pourquoi c'est utile ? <span class="muted small">(récap)</span></h2>
+            <div class="grid-3">
+              <div class="card comments fragment"><h4>🎯 Clarté</h4><p>L'intention et le poids sont écrits, pas devinés.</p></div>
+              <div class="card comments fragment"><h4>⚡ Vitesse</h4><p>Priorisation immédiate, moins d'aller-retours, merges plus rapides.</p></div>
+              <div class="card comments fragment"><h4>💬 Bienveillance</h4><p>Moins de tensions, moins de sur-interprétation, plus de sécurité psychologique.</p></div>
+              <div class="card comments fragment"><h4>🧭 Discipline du relecteur</h4><p>Qualifier un retour oblige à se demander s'il est vraiment utile.</p></div>
+              <div class="card comments fragment"><h4>📈 Exploitable</h4><p>Parsable : stats de revue, filtres, bots, rappels sur les <code>blocking</code>.</p></div>
+              <div class="card comments fragment"><h4>🎓 Apprentissage</h4><p><code>praise</code>, <code>thought</code>, <code>note</code> transforment la revue en transmission de savoir.</p></div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Bonnes pratiques</h2>
+            <ul>
+              <li class="fragment"><strong>Un commentaire = une intention.</strong> Deux sujets ? Deux commentaires.</li>
+              <li class="fragment">Toujours expliquer le <strong>pourquoi</strong> dans la discussion</li>
+              <li class="fragment">Un <code>issue</code> vient idéalement avec une <code>suggestion</code></li>
+              <li class="fragment">Préférer le « <strong>on</strong> » au « <strong>tu</strong> » : on parle du code, pas de la personne</li>
+              <li class="fragment">Réserver <code>(blocking)</code> à ce qui compte vraiment</li>
+              <li class="fragment">Côté auteur : lire le label <strong>avant</strong> de réagir au contenu</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h2>Ressources</h2>
+          <ul class="small">
+            <li><a href="https://www.conventionalcommits.org/fr/v1.0.0/" target="_blank">conventionalcommits.org</a> — la spécification</li>
+            <li><a href="https://semver.org/lang/fr/" target="_blank">semver.org</a> — Semantic Versioning</li>
+            <li><a href="https://conventionalcomments.org/" target="_blank">conventionalcomments.org</a> — labels &amp; décorations</li>
+            <li><a href="https://keepachangelog.com/fr/" target="_blank">keepachangelog.com</a> — principes d'un bon changelog</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Merci !</h1>
+          <div class="cc" style="max-width:720px;margin:1em auto">
+            <span class="label accent-comments">question</span> <span class="deco">(non-blocking)</span>: des questions ?
+          </div>
+        </section>
+
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

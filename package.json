@@ -1,0 +1,27 @@
+{
+  "name": "speak-conventional",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Talk about writing commits, changelogs and code review comments that people can read and tools can process, using Conventional Commits, Conventional Changelog and Conventional Comments.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tJimbow/speak-conventional.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tJimbow/speak-conventional/issues"
+  },
+  "homepage": "https://github.com/tJimbow/speak-conventional#readme",
+  "dependencies": {
+    "reveal.js": "^6.0.2"
+  },
+  "devDependencies": {
+    "vite": "^8.3.1"
+  }
+}

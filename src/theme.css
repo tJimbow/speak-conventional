@@ -1,0 +1,111 @@
+:root {
+  --r-background-color: #14161f;
+  --r-main-font: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  --r-heading-font: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  --r-main-font-size: 32px;
+  --r-heading-text-transform: none;
+  --r-heading-font-weight: 700;
+  --r-link-color: #7aa2ff;
+  --r-link-color-hover: #a9c2ff;
+  --r-code-font: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+
+  --c-commits: #ffb347;
+  --c-changelog: #5fd39a;
+  --c-comments: #7aa2ff;
+  --c-danger: #ff6b6b;
+  --c-muted: #9aa0b4;
+  --c-card: #1f2230;
+}
+
+.reveal h1 { font-size: 2.4em; }
+.reveal h2 { font-size: 1.6em; margin-bottom: 0.6em; }
+.reveal h3 { font-size: 1.15em; color: var(--c-muted); }
+.reveal .muted { color: var(--c-muted); }
+.reveal .small { font-size: 0.7em; }
+.reveal .tiny { font-size: 0.55em; }
+.reveal ul, .reveal ol { display: block; }
+.reveal li { margin: 0.25em 0; }
+.reveal pre { width: 100%; font-size: 0.5em; box-shadow: none; }
+.reveal pre code { max-height: 520px; padding: 0.8em 1em; border-radius: 10px; }
+.reveal pre code.nohighlight { background: #272822; color: #f8f8f2; font-size: 1.5em; line-height: 1.4; }
+.reveal code:not(pre code) {
+  background: #2a2e40;
+  padding: 0.05em 0.3em;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+/* Section accents */
+.reveal .accent-commits { color: var(--c-commits); }
+.reveal .accent-changelog { color: var(--c-changelog); }
+.reveal .accent-comments { color: var(--c-comments); }
+.reveal .accent-danger { color: var(--c-danger); }
+
+.reveal .section-title .kicker {
+  font-size: 0.8em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+/* Layout helpers */
+.reveal .cols { display: flex; gap: 1.2em; align-items: stretch; text-align: left; }
+.reveal .cols > * { flex: 1; }
+.reveal .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8em; text-align: left; }
+.reveal .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8em; text-align: left; }
+
+.reveal .card {
+  background: var(--c-card);
+  border-radius: 14px;
+  padding: 0.7em 0.9em;
+  font-size: 0.7em;
+  border-top: 4px solid var(--c-muted);
+}
+.reveal .card h4 { margin: 0 0 0.4em; font-size: 1.1em; text-transform: none; }
+.reveal .card p { margin: 0.2em 0; }
+.reveal .card pre { font-size: 0.8em; margin: 0.3em 0; }
+.reveal .card.commits { border-color: var(--c-commits); }
+.reveal .card.changelog { border-color: var(--c-changelog); }
+.reveal .card.comments { border-color: var(--c-comments); }
+.reveal .card.bad { border-color: var(--c-danger); }
+.reveal .card.good { border-color: var(--c-changelog); }
+
+.reveal .left { text-align: left; }
+
+/* Tables */
+.reveal table { font-size: 0.6em; margin: 0 auto; }
+.reveal table th { color: var(--c-muted); }
+.reveal table td, .reveal table th { padding: 0.35em 0.7em; border-bottom: 1px solid #333850; }
+
+/* Conventional comment bubbles */
+.reveal .cc {
+  background: var(--c-card);
+  border-left: 5px solid var(--c-comments);
+  border-radius: 8px;
+  padding: 0.5em 0.8em;
+  margin: 0.4em 0;
+  font-size: 0.62em;
+  text-align: left;
+}
+.reveal .cc .label { font-family: var(--r-code-font); font-weight: 700; }
+.reveal .cc .deco { font-family: var(--r-code-font); color: var(--c-muted); }
+.reveal .cc.blocking { border-color: var(--c-danger); }
+.reveal .cc.praise { border-color: var(--c-changelog); }
+.reveal .cc.nb { border-color: var(--c-commits); }
+.reveal .cc.bad { border-color: #555; font-style: italic; }
+
+/* Flow diagram */
+.reveal .flow { display: flex; align-items: center; justify-content: center; gap: 0.4em; font-size: 0.6em; flex-wrap: wrap; }
+.reveal .flow .step { background: var(--c-card); border-radius: 10px; padding: 0.5em 0.8em; border: 2px solid var(--c-changelog); }
+.reveal .flow .arrow { color: var(--c-muted); font-size: 1.4em; }
+
+.reveal .big-quote { font-size: 1.3em; font-style: italic; line-height: 1.4; }
+.reveal .pill {
+  display: inline-block;
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  background: #2a2e40;
+  font-family: var(--r-code-font);
+  font-size: 0.7em;
+  margin: 0.15em;
+}
